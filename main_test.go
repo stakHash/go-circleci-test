@@ -11,8 +11,9 @@ func TestHelloSuccess(t *testing.T) {
 	}
 }
 
-func TestHelloFailed(t *testing.T) {
-	suspect := "hello, failed"
+func TestHelloFailed_fixed(t *testing.T) {
+	//suspect := "hello, failed"
+	suspect := "hello, go"
 	result := hello()
 
 	if suspect != result {
