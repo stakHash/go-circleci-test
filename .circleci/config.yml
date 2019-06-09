@@ -1,11 +1,19 @@
-version: 2
-jobs:
-  build:
-    environment:
-      GOPATH: /home/circleci/go
+version: 2.1
+
+orbs:
+  codecov: codecov/codecov@1.0.5
+
+executors:
+  go-112:
     docker:
       - image: circleci/golang:1.12
     working_directory: /home/circleci/go/src/github.com/tksn-jp/go-circleci-test
+
+jobs:
+  build:
+    executor: go-112
+    environment:
+      GOPATH: /home/circleci/go
     steps:
       - run: echo 'export PATH=${GOPATH}/bin/:${PATH}' >> $BASH_ENV
       - checkout
@@ -15,7 +23,9 @@ jobs:
       - run: golint ./...
       - run: go vet ./...
       - run: go test -v -race ./...
-      - run: goverage -coverprofile=./coverage.text ./...
+      - run: goverage -coverprofile=./coverage.txt ./...
+      - codecov/upload:
+          file: ./coverage.txt
       # - run: bash <(curl -s https://codecov.io/bash)
   # deploy:
   #   environment:
